@@ -12,21 +12,21 @@
       margin: 0;
       font-family: sans-serif;
       font-size: 11px;
-      fill: purple;
+      fill: #4B0082; /* indigo */
     }
 
     .axis path, .axis line {
       fill: none;
-      stroke: maroon;
+      stroke: #8B0000; /* dark red */
       shape-rendering: crispEdges;  /* Round any decimal pixels so it'll render nicely */
     }
 
     circle {
-      fill: pink;
+      fill: #FF69B4; /* hot pink */
     }
 
     circle:hover{
-      fill: magenta;
+      fill: #FF1493; /* deep pink */
     }
 
   </style>
@@ -37,7 +37,7 @@
   <script type="text/javascript">
     var w = window.innerWidth,
         h = window.innerHeight,
-        margin = { top: 40, right: 150, bottom: 20, left: 40 },
+        margin = { top: 40, right: 20, bottom: 20, left: 40 },
         radius = 6;
 
     var svg = d3.select("body").append("svg").attr({
@@ -51,20 +51,20 @@
         d["y"] = +d["y"];
         d.name = d.Target;
       });
-    console.log(dataset[0]);
+
     // We're passing in a function in d3.max to tell it what we're maxing (x value)
     var xScale = d3.scale.linear()
-        .domain([0, d3.max(dataset, function (d) { return d.x + 10; })])
+        .domain([0, 1680])
         .range([margin.left, w - margin.right]);  // Set margins for x specific
 
     // We're passing in a function in d3.max to tell it what we're maxing (y value)
     var yScale = d3.scale.linear()
-        .domain([0, d3.max(dataset, function (d) { return d.y + 10; })])
+        .domain([0, 1050])
         .range([margin.top, h - margin.bottom]);  // Set margins for y specific
 
     // Add a X and Y Axis (Note: orient means the direction that ticks go, not position)
-    var xAxis = d3.svg.axis().scale(xScale).orient("top");
-    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+    var xAxis = d3.svg.axis().scale(xScale).orient("top").ticks(16);
+    var yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(10);
 
     // Sets circles attributes
     var circleAttrs = {
