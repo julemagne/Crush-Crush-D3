@@ -37,7 +37,7 @@
   <script type="text/javascript">
     var w = window.innerWidth,
         h = window.innerHeight,
-        margin = { top: 40, right: 20, bottom: 20, left: 40 },
+        margin = { top: 40, right: 150, bottom: 20, left: 40 },
         radius = 6;
 
     var svg = d3.select("body").append("svg").attr({
@@ -45,22 +45,13 @@
       height: h
     });
 
-    var dataset = [
-      { x:1000, y:  462, name: 'Gift button' },
-      { x:1250, y:  533, name: 'Pay with dollars' },
-      { x: 840, y:  340, name: 'Over arrow' },
-      { x: 610, y:  433, name: 'Designer bags' },
-      { x: 610, y:  433, name: 'Shells' },
-      { x: 610, y:  433, name: 'Drinks' },
-      { x: 610, y:  770, name: 'Books' },
-      { x: 610, y:  666, name: 'Jam' },
-      { x: 610, y:  555, name: 'Magic Candles' },
-      { x: 870, y:  666, name: 'Shoes' },
-      { x: 870, y:  433, name: 'Roses' },
-      { x: 870, y:  555, name: 'Plushy' },
-      { x: 870, y:  770, name: 'Necklaces' }
-    ];
-
+    d3.csv("targets.csv", function(dataset) {
+      dataset.forEach(function(d) {
+        d.x = +d.x;
+        d["y"] = +d["y"];
+        d.name = d.Target;
+      });
+    console.log(dataset[0]);
     // We're passing in a function in d3.max to tell it what we're maxing (x value)
     var xScale = d3.scale.linear()
         .domain([0, d3.max(dataset, function (d) { return d.x + 10; })])
@@ -140,6 +131,7 @@
           // Select text by id and then remove
           d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
         }
+      });
 
   </script>
 </html>
