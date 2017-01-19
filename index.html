@@ -17,6 +17,12 @@
       fill: #4B0082; /* indigo */
     }
 
+    p {
+      margin: 0;
+      padding: 0 1rem 0 0;
+      text-align: center;
+    }
+
     .axis path, .axis line {
       fill: none;
       stroke: #8B0000; /* dark red */
@@ -27,14 +33,27 @@
       fill: #FF69B4; /* hot pink */
     }
 
-    circle:hover{
+    circle:hover {
       fill: #FF1493; /* deep pink */
+    }
+
+    ul {
+      padding: 0;
+      margin: 1rem 1rem 0.5rem 0;
+    }
+
+    li {
+      list-style: none;
+      background: rgba(106,  90, 205, 0.6); /* slate blue */
+      padding: 0.4rem 1rem 0.3rem 1rem;
+      margin: 0;
+      text-align: center;
     }
 
     .d3-tip {
       line-height: 1.5rem;
       font-size: 1rem;
-      padding: 1rem;
+      padding: 0 0 1rem 1rem;
       background: rgba(0, 0, 100, 0.8); /* blue */
       color: rgba(255, 255, 240, 0.9); /* ivory */
       border-radius: 0.2rem;
@@ -47,8 +66,8 @@
       font-size: 0.7rem;
       width: 100%;
       line-height: 0.5rem;
-      color: rgba(0, 0, 0, 0.8);
-      content: "\25BC";
+      color: rgba(0, 0, 0, 0.8); /* blue */
+      content: "\25BC"; /* downward triangle */
       position: absolute;
       text-align: center;
     }
@@ -127,7 +146,7 @@
                 allText += '<li>' + data.name + '</li>';
               }
             });
-            allText += '</ul>(' + d.x + ',' + d.y + ')';
+            allText += '</ul><p>(' + d.x + ',' + d.y + ')</p>';
             return [allText];  // Value of the text
         })
 
