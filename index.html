@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <meta charset="UTF-8"> 
   <title>Crush Crush D3</title>
   <!-- Load D3 from site -->
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
   <!-- CSS (Styling) -->
   <style type="text/css">
@@ -27,6 +29,35 @@
 
     circle:hover{
       fill: #FF1493; /* deep pink */
+    }
+
+    .d3-tip {
+      line-height: 1.5;
+      font-size: 1rem;
+      padding: 12px;
+      background: rgba(0, 0, 100, 0.8);
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+      box-sizing: border-box;
+      display: inline;
+      font-size: 10px;
+      width: 100%;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.8);
+      content: "\25BC";
+      position: absolute;
+      text-align: center;
+    }
+
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+      margin: -1px 0 0 0;
+      top: 100%;
+      left: 0;
     }
 
   </style>
@@ -85,40 +116,39 @@
       transform: "translate(" + [margin.left, 0] + ")"
     }).call(yAxis);  // Call the yAxis function on the group
 
+    //Add tooltips
+    var tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-10, 0])
+        .html(function(d) {
+          var allText = '<ul>';
+            for (i = 0; i < dataset.length; i++) {
+              if ((dataset[i].x == d.x) && (dataset[i].y == d.y)) {
+                allText += '<li>' + dataset[i].name + '</li>';
+              }
+            }
+            allText += '</ul>(' + d.x + ',' + d.y + ')';
+            return [allText];  // Value of the text
+        })
+
+    svg.call(tip);
+
     var circles = svg.selectAll("circle")
-        .data(dataset)
-        .enter()
-        .append("circle")
-        .on("mouseover", handleMouseOver)
-        .on("mouseout", handleMouseOut);
+          .data(dataset)
+          .enter()
+          .append("circle")
+          .on("mouseover", handleMouseOver)
+          .on("mouseover", tip.show)
+          .on("mouseout", tip.hide)
 
     circles.attr(circleAttrs);
 
     // Create Event Handlers for mouse
     function handleMouseOver(d, i) {  // Add interactivity
 
-          // Use D3 to select element, change color and size
+          // Use D3 to select element, change size
           d3.select(this).attr({
-            // fill: "orange",
             r: radius * 2
-          });
-
-          // Specify where to put label of text
-          svg.append("text").attr({
-             id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
-              x: function() { return xScale(d.x) + 19; },
-              y: function() { return yScale(d.y) - 15; }
-          })
-          .text(function() {
-            // Find all text for overlapping coordinates
-            var allText = '';
-            for (i = 0; i < dataset.length; i++) {
-              if ((dataset[i].x == d.x) && (dataset[i].y == d.y)) {
-                allText += dataset[i].name + ' ';
-              }
-            }
-            allText += '(' + d.x + ',' + d.y + ')';
-            return [allText];  // Value of the text
           });
         }
 
@@ -127,9 +157,6 @@
           d3.select(this).attr({
             r: radius
           });
-
-          // Select text by id and then remove
-          d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
         }
       });
 
