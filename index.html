@@ -5,7 +5,7 @@
   <title>Crush Crush D3</title>
   <!-- Load D3 from site -->
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+  <script src="d3.tip.v0.6.3.js"></script>
 
   <!-- CSS (Styling) -->
   <style type="text/css">
@@ -32,21 +32,21 @@
     }
 
     .d3-tip {
-      line-height: 1.5;
+      line-height: 1.5rem;
       font-size: 1rem;
-      padding: 12px;
-      background: rgba(0, 0, 100, 0.8);
-      color: #fff;
-      border-radius: 2px;
+      padding: 1rem;
+      background: rgba(0, 0, 100, 0.8); /* blue */
+      color: rgba(255, 255, 240, 0.9); /* ivory */
+      border-radius: 0.2rem;
     }
 
     /* Creates a small triangle extender for the tooltip */
     .d3-tip:after {
       box-sizing: border-box;
       display: inline;
-      font-size: 10px;
+      font-size: 0.7rem;
       width: 100%;
-      line-height: 1;
+      line-height: 0.5rem;
       color: rgba(0, 0, 0, 0.8);
       content: "\25BC";
       position: absolute;
@@ -55,7 +55,7 @@
 
     /* Style northward tooltips differently */
     .d3-tip.n:after {
-      margin: -1px 0 0 0;
+      margin: 0;
       top: 100%;
       left: 0;
     }
@@ -116,17 +116,17 @@
       transform: "translate(" + [margin.left, 0] + ")"
     }).call(yAxis);  // Call the yAxis function on the group
 
-    //Add tooltips
+    // Add tooltips
     var tip = d3.tip()
         .attr("class", "d3-tip")
         .offset([-10, 0])
         .html(function(d) {
           var allText = '<ul>';
-            for (i = 0; i < dataset.length; i++) {
-              if ((dataset[i].x == d.x) && (dataset[i].y == d.y)) {
-                allText += '<li>' + dataset[i].name + '</li>';
+            dataset.forEach(data => {
+              if ((data.x == d.x) && (data.y == d.y)) {
+                allText += '<li>' + data.name + '</li>';
               }
-            }
+            });
             allText += '</ul>(' + d.x + ',' + d.y + ')';
             return [allText];  // Value of the text
         })
@@ -138,21 +138,23 @@
           .enter()
           .append("circle")
           .on("mouseover", handleMouseOver)
-          .on("mouseover", tip.show)
-          .on("mouseout", tip.hide)
+          .on("mouseout", handleMouseOut)
 
     circles.attr(circleAttrs);
 
     // Create Event Handlers for mouse
     function handleMouseOver(d, i) {  // Add interactivity
-
+          // Show tooltip
+          tip.show(d);
           // Use D3 to select element, change size
           d3.select(this).attr({
-            r: radius * 2
+            r: radius * 1.7
           });
         }
 
     function handleMouseOut(d, i) {
+          // Hide tooltip
+          tip.hide(d);
           // Use D3 to select element, change size back to normal
           d3.select(this).attr({
             r: radius
