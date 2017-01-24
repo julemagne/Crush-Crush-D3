@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <meta charset="UTF-8"> 
+  <meta charset="UTF-8">
   <title>Crush Crush D3</title>
   <!-- Load D3 from site -->
   <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -88,7 +88,7 @@
     var w = window.innerWidth,
         h = window.innerHeight,
         margin = { top: 40, right: 20, bottom: 20, left: 40 },
-        radius = 6;
+        radius = 12;
 
     var svg = d3.select("body").append("svg").attr({
       width: w,
@@ -141,11 +141,11 @@
         .offset([-10, 0])
         .html(function(d) {
           var allText = '<ul>';
-            dataset.forEach(data => {
-              if ((data.x == d.x) && (data.y == d.y)) {
-                allText += '<li>' + data.name + '</li>';
+            for (var i = 0; i < dataset.length; i++) {
+              if ((dataset[i].x == d.x) && (dataset[i].y == d.y)) {
+                allText += '<li>' + dataset[i].name + '</li>';
               }
-            });
+            };
             allText += '</ul><p>(' + d.x + ',' + d.y + ')</p>';
             return [allText];  // Value of the text
         })
